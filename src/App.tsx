@@ -12,11 +12,11 @@ function App() {
     <>
       <main>
         <h1 className='title'>Music Note Game</h1>
-
+        {UI === "play" ? <Gameone /> : null}
         {UI === "" ? (
           <button className="button-5" role="button" onClick={(function () { setUI("play") })}>Žaisti</button>
         ): <button className="button-5" role="button" onClick={(function () { setUI("") })}>back</button>}
-        {UI === "play" ? <Gameone /> : null}
+        
       </main>
     </>
   )
