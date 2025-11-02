@@ -9,10 +9,14 @@ import notesLa from "./assets/sound/notes/la.mp3";
 import notesMi from "./assets/sound/notes/mi.mp3";
 import notesRe from "./assets/sound/notes/re.mp3";
 
-function Blackoverlay(props: { children: any; }) {
+function Blackoverlay(props:{ children : any }) {
   return <div className="overlay">{props.children}</div>;
 }
+ 
+
 function App() {
+
+
   const [timer, setTimer] = useState(3);
   const [content, setContent] = useState("");
 
@@ -24,7 +28,7 @@ function App() {
   const [playRe] = useSound(notesRe);
 
   const notes = [
-    { play: playC, label: "c" },
+    { play: playC, label: "c " },
     { play: playF, label: "f" },
     { play: playDo, label: "do" },
     { play: playLa, label: "la" },
