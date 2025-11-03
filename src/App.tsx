@@ -12,7 +12,7 @@ function App() {
   return (
     <>
       <main>
-        <h1 className='title'>Music Note Game</h1>
+        <h1 className='title'>Atspėk natą</h1>
         <img src={logo} alt="logo kitm" / ><br / >
         {UI === "play" ? <Gameone /> : null}
         {UI === "" ? (
