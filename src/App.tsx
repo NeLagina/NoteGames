@@ -13,7 +13,7 @@ function App() {
     <>
       <main>
         <h1 className='title'>Music Note Game</h1>
-        <img src={logo} alt="logo kitm" / ><br>
+        <img src={logo} alt="logo kitm" / ><br / >
         {UI === "play" ? <Gameone /> : null}
         {UI === "" ? (
           <button className="button-5" role="button" onClick={(function () { setUI("play") })}>Žaisti</button>
