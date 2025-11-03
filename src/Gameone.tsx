@@ -16,7 +16,7 @@ function Blackoverlay(props: { children: any }) {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-function DeathScreen({score}) {
+function DeathScreen({score: any}) {
   return (
     <>
       <h1>Tasku gavai {score} :(</h1>
