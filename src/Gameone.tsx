@@ -51,9 +51,9 @@ function App() {
     { play: playC, label: "Si" },
   ];
 
-  // Game timer (single effect)
+
   useEffect(() => {
-    if (mode === "Death") return; // stop when dead
+    if (mode === "Death") return; 
 
     if (gameTime > 0) {
       const interval = setInterval(() => {
@@ -61,7 +61,7 @@ function App() {
       }, 1000);
       return () => clearInterval(interval);
     } else {
-      // Ensure we switch to death mode when time runs out
+
       setMode("Death");
     }
   }, [gameTime, mode]);
@@ -76,13 +76,12 @@ function App() {
       }, 1000);
       return () => clearInterval(interval);
     } else {
-      // roundTime === 0 while in Guess => penalize and go to next round (unless dead)
       setScore((prev) => prev - 50);
-      // Wait a tick to avoid state updates during render
+   
       nextRound();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roundTime, mode]); // nextRound is defined below; intentionally not included
+    
+  }, [roundTime, mode]); 
 
   useEffect(() => {
     const startGame = async () => {
@@ -92,23 +91,24 @@ function App() {
       }
     };
     startGame();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [mode]);
 
   const nextRound = () => {
-    if (mode === "Death") return; // don't start new rounds when dead
+    if (mode === "Death") return; 
 
     if (currentNote) {
       setLastNoteLabel(currentNote.label);
     }
     const note = notes[Math.floor(Math.random() * notes.length)];
     setCurrentNote(note);
-    // play can throw if not ready; guard just in case
+   
     try {
       note.play();
     } catch (e) {
       // swallow play errors in environments where audio isn't allowed/loaded
       // console.warn("Failed to play note:", e);
+      alert("Jusu naršykle neleidžia groti garsų bandykit Firefox ar kita naršykle")
     }
     setRoundTime(10);
     setMode("Guess");
