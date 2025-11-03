@@ -16,11 +16,12 @@ function Blackoverlay(props: { children: any }) {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-function DeathScreen() {
+function DeathScreen({score}) {
   return (
     <>
       <h1>Mirei :(</h1>
-      <p>Laikas baigėsi!</p>
+      <p>Laikas baigėsi! </p>
+      <p>{score}<\p>
     </>
   );
 }
@@ -120,7 +121,7 @@ function App() {
   return (
     <Blackoverlay>
       {mode === "Death" ? (
-        <DeathScreen />
+        <DeathScreen score={score} />
       ) : (
         <>
           <h1>Laikas liko: {Math.floor(gameTime / 60)}:{(gameTime % 60).toString().padStart(2, "0")}</h1>
