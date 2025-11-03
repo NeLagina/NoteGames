@@ -19,9 +19,9 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 function DeathScreen({score}) {
   return (
     <>
-      <h1>Mirei :(</h1>
+      <h1>Tasku gavai {score} :(</h1>
       <p>Laikas baigėsi! </p>
-      <p>{score}<\p>
+     
     </>
   );
 }
