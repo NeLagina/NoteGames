@@ -16,12 +16,11 @@ function Blackoverlay(props: { children: any }) {
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-function DeathScreen({score: any}) {
+function DeathScreen({ score }: { score: number }) {
   return (
     <>
       <h1>Tasku gavai {score} :(</h1>
       <p>Laikas baigėsi! </p>
-     
     </>
   );
 }
@@ -33,7 +32,6 @@ function App() {
   const [mode, setMode] = useState<"Start" | "Guess" | "Death">("Start");
   const [currentNote, setCurrentNote] = useState<{ play: () => void; label: string } | null>(null);
   const [lastNoteLabel, setLastNoteLabel] = useState<string | null>(null);
-
 
   const [playC] = useSound(notesC);
   const [playDo] = useSound(notesDo);
@@ -51,33 +49,40 @@ function App() {
     { play: playSol, label: "Sol" },
     { play: playLa, label: "La" },
     { play: playC, label: "Si" },
-
   ];
 
-  // Game timer
+  // Game timer (single effect)
   useEffect(() => {
-    if (gameTime > 0 && mode !== "Death") {
+    if (mode === "Death") return; // stop when dead
+
+    if (gameTime > 0) {
       const interval = setInterval(() => {
         setGameTime((prev) => prev - 1);
       }, 1000);
       return () => clearInterval(interval);
-    } else if (gameTime <= 0) {
+    } else {
+      // Ensure we switch to death mode when time runs out
       setMode("Death");
     }
   }, [gameTime, mode]);
 
   // Round timer
   useEffect(() => {
-    if (roundTime > 0 && mode === "Guess") {
+    if (mode !== "Guess") return;
+
+    if (roundTime > 0) {
       const interval = setInterval(() => {
         setRoundTime((prev) => prev - 1);
       }, 1000);
       return () => clearInterval(interval);
-    } else if (roundTime === 0 && mode === "Guess") {
+    } else {
+      // roundTime === 0 while in Guess => penalize and go to next round (unless dead)
       setScore((prev) => prev - 50);
+      // Wait a tick to avoid state updates during render
       nextRound();
     }
-  }, [roundTime, mode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roundTime, mode]); // nextRound is defined below; intentionally not included
 
   useEffect(() => {
     const startGame = async () => {
@@ -87,21 +92,30 @@ function App() {
       }
     };
     startGame();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
   const nextRound = () => {
+    if (mode === "Death") return; // don't start new rounds when dead
+
     if (currentNote) {
       setLastNoteLabel(currentNote.label);
     }
     const note = notes[Math.floor(Math.random() * notes.length)];
     setCurrentNote(note);
-    note.play();
+    // play can throw if not ready; guard just in case
+    try {
+      note.play();
+    } catch (e) {
+      // swallow play errors in environments where audio isn't allowed/loaded
+      // console.warn("Failed to play note:", e);
+    }
     setRoundTime(5);
     setMode("Guess");
   };
 
   const handleGuess = (label: string) => {
-    if (!currentNote) return;
+    if (mode === "Death" || !currentNote) return;
     if (label === currentNote.label) {
       setScore((prev) => prev + 100);
     } else {
@@ -109,14 +123,6 @@ function App() {
     }
     nextRound();
   };
-  useEffect(() => {
-    if (gameTime > 0 && mode !== "Death") {
-      const interval = setInterval(() => {
-        setGameTime((prev) => prev - 1);
-      }, 1000);
-      return () => clearInterval(interval);
-    } 
-  }, [gameTime, score, mode]);
 
   return (
     <Blackoverlay>
