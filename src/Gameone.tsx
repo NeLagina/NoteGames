@@ -26,7 +26,7 @@ function DeathScreen({ score }: { score: number }) {
 }
 
 function App() {
-  const [gameTime, setGameTime] = useState(35);
+  const [gameTime, setGameTime] = useState(65);
   const [roundTime, setRoundTime] = useState(0);
   const [score, setScore] = useState(150);
   const [mode, setMode] = useState<"Start" | "Guess" | "Death">("Start");
@@ -110,7 +110,7 @@ function App() {
       // swallow play errors in environments where audio isn't allowed/loaded
       // console.warn("Failed to play note:", e);
     }
-    setRoundTime(5);
+    setRoundTime(10);
     setMode("Guess");
   };
 
